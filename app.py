@@ -14,7 +14,7 @@ def solve():
     solucion = list(map(int, request.form['solucion'].split(',')))
     visitados = []
     nodo_inicial = Nodo(estado_inicial)
-    nodo = buscar_solucion_DFS_Rec(nodo_inicial, solucion, visitados)
+    nodo = buscar_solucion_DFS_Rec(nodo, solucion, visitados, limite)
 
     resultado = []
     while nodo.get_padre() is not None:
