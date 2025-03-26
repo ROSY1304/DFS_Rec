@@ -16,14 +16,16 @@ conexiones = {
     'SONORA': {'MONTERREY', 'HIDALGO', 'SLP', 'EDO.MEX', 'MICHOACAN'}
 }
 
-# Función DFS recursiva
+# Función DFS iterativa
 def DFS_prof_iter(nodo, solucion):
     for limite in range(0, 100):
         visitados = []
         sol = buscar_solucion_DFS_Rec(nodo, solucion, visitados, limite)
         if sol is not None:
             return sol
+    return None
 
+# Función recursiva para la búsqueda DFS
 def buscar_solucion_DFS_Rec(nodo, solucion, visitados, limite):
     if limite > 0:
         visitados.append(nodo)
@@ -36,13 +38,13 @@ def buscar_solucion_DFS_Rec(nodo, solucion, visitados, limite):
         lista_hijos = []
         for un_hijo in conexiones.get(nodo.get_datos(), []):
             hijo = Nodo(un_hijo)
-            # Asegurarse de no visitar nodos ya visitados
             if not hijo.en_lista(visitados):
-                hijo.set_padre(nodo)  # Asignar el nodo padre
+                hijo.set_padre(nodo)
                 lista_hijos.append(hijo)
 
         nodo.set_hijos(lista_hijos)
 
+        # Recursión para cada hijo
         for nodo_hijo in nodo.get_hijos():
             sol = DFS_prof_iter(nodo_hijo, solucion)
             if sol is not None:
