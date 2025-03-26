@@ -1,9 +1,9 @@
-from flask import Flask, request, render_template
-from Arbol import Nodo
+from flask import Flask, jsonify, request
+from Arbol import Nodo  # Asumiendo que tienes definido Nodo en un archivo separado
 
 app = Flask(__name__)
 
-# Definir conexiones de ciudades
+# Conexiones entre nodos (simulación de tu mapa)
 conexiones = {
     'EDO.MEX': {'QRO', 'SLP', 'SONORA'},
     'PUEBLA': {'HIDALGO', 'SLP'},
@@ -16,7 +16,7 @@ conexiones = {
     'SONORA': {'MONTERREY', 'HIDALGO', 'SLP', 'EDO.MEX', 'MICHOACAN'}
 }
 
-# Función DFS iterativa
+# Función DFS iterativa con límite de profundidad
 def DFS_prof_iter(nodo, solucion):
     for limite in range(0, 100):
         visitados = []
@@ -25,58 +25,49 @@ def DFS_prof_iter(nodo, solucion):
             return sol
     return None
 
-# Función recursiva para la búsqueda DFS
+# Búsqueda recursiva de solución usando DFS
 def buscar_solucion_DFS_Rec(nodo, solucion, visitados, limite):
     if limite > 0:
         visitados.append(nodo)
-
-        # Si encontramos la solución, retornamos el nodo
         if nodo.get_datos() == solucion:
             return nodo
-        
-        # Expandir nodos hijos
-        lista_hijos = []
-        for un_hijo in conexiones.get(nodo.get_datos(), []):
-            hijo = Nodo(un_hijo)
-            if not hijo.en_lista(visitados):
-                hijo.set_padre(nodo)
-                lista_hijos.append(hijo)
+        else:
+            dato_nodo = nodo.get_datos()
+            lista_hijos = []
+            for un_hijo in conexiones.get(dato_nodo, []):  
+                hijo = Nodo(un_hijo)
+                if not hijo.en_lista(visitados):
+                    lista_hijos.append(hijo)
+            
+            nodo.set_hijos(lista_hijos)
 
-        nodo.set_hijos(lista_hijos)
-
-        # Recursión para cada hijo
-        for nodo_hijo in nodo.get_hijos():
-            sol = DFS_prof_iter(nodo_hijo, solucion)
-            if sol is not None:
-                return sol
+            for nodo_hijo in nodo.get_hijos():
+                sol = buscar_solucion_DFS_Rec(nodo_hijo, solucion, visitados, limite - 1)
+                if sol is not None:
+                    return sol
     return None
 
-@app.route('/')
-def index():
-    return render_template('index.html')
-
-@app.route('/solve', methods=['POST'])
-def solve():
-    # Obtener el estado inicial y el estado final desde el formulario
-    estado_inicial = request.form['estado_inicial']
-    solucion = request.form['solucion']
-    visitados = []
-    
-    # Inicializar el nodo inicial
-    nodo_inicial = Nodo(estado_inicial)
-    nodo = DFS_prof_iter(nodo_inicial, solucion)
-
-    # Preparar el resultado
-    resultado = []
-    if nodo:
-        while nodo is not None:
-            resultado.append(nodo.get_datos())
-            nodo = nodo.get_padre()
-        resultado.reverse()
-    else:
-        resultado = ["No se encontró una solución"]
-
-    return render_template('index.html', resultado=resultado)
+@app.route('/dfs', methods=['POST'])
+def resolver_dfs():
+    try:
+        data = request.json
+        estado_inicial = data.get('estado_inicial', '')
+        solucion = data.get('solucion', '')
+        
+        nodo_inicial = Nodo(estado_inicial)
+        nodo = DFS_prof_iter(nodo_inicial, solucion)
+        
+        if nodo is not None:
+            resultado = []
+            while nodo is not None:
+                resultado.append(nodo.get_datos())
+                nodo = nodo.get_padre()
+            resultado.reverse()
+            return jsonify({'ruta': resultado}), 200
+        else:
+            return jsonify({'mensaje': 'Solución no encontrada'}), 404
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
 
 if __name__ == '__main__':
     app.run(debug=True)
