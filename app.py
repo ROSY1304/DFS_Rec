@@ -1,6 +1,6 @@
 from flask import Flask, request, render_template
 from Arbol import Nodo
-
+from DFS_prof import DFS_prof_iter
 app = Flask(__name__)
 
 # Definir conexiones de ciudades
@@ -47,18 +47,22 @@ def index():
 
 @app.route('/solve', methods=['POST'])
 def solve():
+    # Obtener el estado inicial y el estado final desde el formulario
     estado_inicial = request.form['estado_inicial']
     solucion = request.form['solucion']
     visitados = []
     
+    # Inicializar el nodo inicial
     nodo_inicial = Nodo(estado_inicial)
     nodo = None
     
+    # Realizar la búsqueda DFS con límite de profundidad
     for limite in range(0, 100):  # Iteración sobre profundidad limitada
         nodo = DFS_Rec(nodo_inicial, solucion, visitados, limite)
         if nodo is not None:
             break
 
+    # Preparar el resultado
     resultado = []
     if nodo:
         while nodo is not None:
