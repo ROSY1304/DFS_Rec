@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DFS Solver</title>
+</head>
+<style>
+    body{
+        margin: 0;
+        background-color: #1f1f1f;
+        font-family: sans-serif;
+        color: azure;
+    }
+    form{
+        margin: auto;
+        margin-top: 20px;
+        width: 300px;
+        border-radius: 10px;
+        background-color: #808080;
+        padding: 20px 10px;
+        text-align: center;
+        color: black;
+    }
+    input{
+        border: transparent;
+        border-bottom: 1px solid #000;
+        background-color: transparent;
+        margin: 6px 0;
+
+    }
+
+    .caja{
+        margin: auto;
+        width: 300px;
+        border: 1px solid #fff;
+        border-radius: 10px;
+        text-align: center;
+        margin-top: 20px;
+    }
+</style>
+<body>
+
+<form action="/solve" method="post">
+    <h1>DFS Solver</h1>
+    <label for="estado_inicial">Estado Inicial (separado por comas):</label>
+    <input type="text" id="estado_inicial" name="estado_inicial" required>
+    <br>
+    <label for="solucion">Solución (separado por comas):</label>
+    <input type="text" id="solucion" name="solucion" required>
+    <br>
+    <button type="submit">Resolver</button>
+</form>
+{% if resultado %}
+<div class="caja">
+
+
+<h2>Resultado:</h2>
+<ul>
+    {% for estado in resultado %}
+    <li>{{ estado }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+</div>
+</body>
+</html>
