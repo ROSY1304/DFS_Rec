@@ -1,87 +1,64 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DFS en Flask</title>
-    <style>
-        body {
-            margin: 0;
-            background-color: #1f1f1f;
-            font-family: sans-serif;
-            color: azure;
-        }
-        form {
-            margin: auto;
-            margin-top: 20px;
-            width: 300px;
-            border-radius: 10px;
-            background-color: #808080;
-            padding: 20px 10px;
-            text-align: center;
-            color: black;
-        }
-        input {
-            border: transparent;
-            border-bottom: 1px solid #000;
-            background-color: transparent;
-            margin: 6px 0;
-            padding: 5px;
-            width: 100%;
-        }
-        button {
-            background-color: #333;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        button:hover {
-            background-color: #555;
-        }
-        .caja {
-            margin: auto;
-            width: 300px;
-            border: 1px solid #fff;
-            border-radius: 10px;
-            text-align: center;
-            margin-top: 20px;
-            padding: 10px;
-            background-color: #333;
-        }
-        h2 {
-            color: white;
-        }
-        ul {
-            list-style-type: none;
-            padding: 0;
-            color: white;
-        }
-    </style>
+    <title>DFS</title>
 </head>
+<style>
+    body{
+        margin: 0;
+        background-color: #1f1f1f;
+        font-family: sans-serif;
+        color: azure;
+    }
+    form{
+        margin: auto;
+        margin-top: 20px;
+        width: 300px;
+        border-radius: 10px;
+        background-color: #808080;
+        padding: 20px 10px;
+        text-align: center;
+        color: black;
+    }
+    input{
+        border: transparent;
+        border-bottom: 1px solid #000;
+        background-color: transparent;
+        margin: 6px 0;
+    }
+    .caja{
+        margin: auto;
+        width: 300px;
+        border: 1px solid #fff;
+        border-radius: 10px;
+        text-align: center;
+        margin-top: 20px;
+    }
+</style>
 <body>
 
-    <form action="/solve" method="post">
-        <h1>DFS </h1>
-        <label for="estado_inicial">Estado Inicial:</label>
-        <input type="text" id="estado_inicial" name="estado_inicial" required placeholder="Ej: EDO.MEX">
-        <br>
-        <label for="solucion">Solución:</label>
-        <input type="text" id="solucion" name="solucion" required placeholder="Ej: HIDALGO">
-        <br>
-        <button type="submit">Resolver</button>
-    </form>
+<form action="/solve" method="post">
+    <h1>DFS</h1>
+    <label for="estado_inicial">Estado Inicial:</label>
+    <input type="text" id="estado_inicial" name="estado_inicial" required>
+    <br>
+    <label for="solucion">Solución:</label>
+    <input type="text" id="solucion" name="solucion" required>
+    <br>
+    <button type="submit">Resolver</button>
+</form>
 
-    {% if resultado %}
-        <div class="caja">
-            <h2>Resultado:</h2>
-            <ul>
-                {% for estado in resultado %}
-                    <li>{{ estado }}</li>
-                {% endfor %}
-            </ul>
-        </div>
-    {% endif %}
+{% if resultado %}
+<div class="caja">
+    <h2>Resultado:</h2>
+    <ul>
+        {% for estado in resultado %}
+        <li>{{ estado }}</li>
+        {% endfor %}
+    </ul>
+</div>
+{% endif %}
 </body>
 </html>
